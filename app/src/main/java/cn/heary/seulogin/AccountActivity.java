@@ -63,8 +63,6 @@ public class AccountActivity extends AppCompatActivity {
     private EditText mPasswordView;
     private CheckBox mMacAuthView;
     private TextView mResultView;
-    private View mProgressView;
-    private View mLoginFormView;
 
     // Config
     private String username;
@@ -99,7 +97,7 @@ public class AccountActivity extends AppCompatActivity {
                 // 开启子线程
                 new Thread() {
                     public void run() {
-                        String result = loginByPost(username, password, isMacAuth);
+                        loginByPost(username, password, isMacAuth);
                     }
                 }.start();
             }
@@ -117,9 +115,6 @@ public class AccountActivity extends AppCompatActivity {
             }
         });
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
-
 
         /* 获取连接信息（是否有活跃连接+是否通过WIFI连接+是否连接网络） */
         ConnectivityManager connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -131,12 +126,14 @@ public class AccountActivity extends AppCompatActivity {
             WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
             String wifiSSID = wifiInfo.getSSID();
 
-            Toast.makeText(AccountActivity.this, "wifi SSID=" + wifiSSID, Toast.LENGTH_SHORT).show();
             if (wifiSSID.toLowerCase().contains(getString(R.string.seu))) {
                 // 开启子线程
                 new Thread() {
                     public void run() {
-                        String result = loginByPost(username, password, isMacAuth); // 调用loginByPost方法
+                        loginByPost(mUsernameView.getText().toString(),
+                                mPasswordView.getText().toString(),
+                                mMacAuthView.isChecked()
+                        );
                     }
                 }.start();
             }
@@ -175,7 +172,7 @@ public class AccountActivity extends AppCompatActivity {
      * @param password
      * @param isMacAuth
      */
-    public String loginByPost(String username, String password, Boolean isMacAuth) {
+    public void loginByPost(String username, String password, Boolean isMacAuth) {
 
         try {
             // 请求的地址
@@ -245,12 +242,10 @@ public class AccountActivity extends AppCompatActivity {
                     mResultView.setText(result_print);
                 }
             });
-            return result_print;
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "";
     }
 
     public void logoutByPost() {
