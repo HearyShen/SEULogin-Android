@@ -11,4 +11,7 @@
     <string name="error_field_required">This field is required</string>
 
     <string name="mac_auth">MAC Authentation</string>
+    <string name="seu">seu</string>
+    <string name="login_url">https://w.seu.edu.cn/index.php/index/login</string>
+    <string name="logout_url">https://w.seu.edu.cn/index.php/index/logout</string>
 </resources>
